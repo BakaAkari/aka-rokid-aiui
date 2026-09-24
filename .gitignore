@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+
+# Build / package artifacts
+*.aix
+*.zip
+artifacts/
+.cache/
+dist/
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Local env / secrets — never commit
+.env
+.env.*
+*.pem
+*.key
+secrets/
+
+# AIUI Studio generated
+.handoff
+aiui-studio/

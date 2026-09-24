@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Secrets & private-IP scan
+        run: node scripts/check-secrets.mjs
+
+      - name: Root monorepo test
+        run: npm test
+
+      - name: Root agents structural validation
+        run: npm run validate
+
+      - name: Agent version discipline
+        run: npm run check:versions
+
+      - name: Per-agent tests & static validation
+        run: |
+          set -e
+          for agent in agents/*/; do
+            echo "==> $agent"
+            (cd "$agent" && npm test && npm run validate)
+          done

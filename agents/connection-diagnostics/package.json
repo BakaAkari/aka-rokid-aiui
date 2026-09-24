@@ -1,0 +1,14 @@
+{
+  "name": "aiui-connection-diagnostics",
+  "version": "1.0.1",
+  "description": "Rokid Glasses 单页连线诊断：运行时能力自检、公网 HTTPS 基线、手机 Tailscale MagicDNS。语音唤起，唯一物理操作是确认键；不依赖方向键/触摸/菜单。仅本机验证，不做 Hermes 集成、不自动上传转写文本。",
+  "main": "app.js",
+  "type": "module",
+  "scripts": {
+    "test": "node --test",
+    "validate": "node scripts/validate.mjs",
+    "package:zip": "node scripts/package-zip.mjs",
+    "package:aix": "node scripts/package-aix.mjs"
+  },
+  "dependencies": {}
+}
