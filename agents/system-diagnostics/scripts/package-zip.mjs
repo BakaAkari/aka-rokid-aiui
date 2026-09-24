@@ -1,0 +1,10 @@
+import { mkdir } from 'node:fs/promises';
+import { join, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { execFileSync } from 'node:child_process';
+const root = dirname(dirname(fileURLToPath(import.meta.url)));
+const outDir = join(root, '..', '..', 'artifacts');
+await mkdir(outDir, { recursive: true });
+const out = join(outDir, 'system-diagnostics-source.zip');
+execFileSync('/usr/bin/zip', ['-qr', out, '.', '-x', 'node_modules/*', '.cache/*', 'test/*', 'scripts/*', 'docs/*', 'README.md', '*.zip', '*.aix'], { cwd: root });
+console.log(out);

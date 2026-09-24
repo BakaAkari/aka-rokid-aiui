@@ -13,6 +13,26 @@ conventions that keep it maintainable long-term.
 - This is what makes a single subdirectory import cleanly into AIUI Studio via
   "Import from Github → <subdirectory>".
 
+## Agent boundaries
+
+Each agent is an independent product/system boundary. Do not fold one agent's
+responsibility into another:
+
+- `connection-diagnostics` — local HTTPS / runtime connectivity probe.
+- `system-diagnostics` — the **full device capability test system**: runtime base
+  APIs, SpeechRecognition zh-CN, camera, speaker/synthesis, public HTTPS baseline.
+  It is the **only** agent allowed to report device capability
+  `ok / unsupported / failed`. Product name "系统测试".
+- `combat-power-detector` — a **product prototype** of a camera/visual experience.
+  It does **not** carry the full system diagnostics and never claims a real
+  combat-power score.
+- `hermes-agent` — a **development skeleton** for the future Hermes client. It is
+  **not yet connected** to any Hermes endpoint and never claims real inference. It
+  does not import or reuse the system test.
+
+No agent imports another agent, and no agent reuses another agent's `lib/`. Each
+is importable standalone into AIUI Studio.
+
 ## Always-apply rules
 
 1. **No secrets.** No keys, tokens, passwords, or hardcoded private / tailnet IPs

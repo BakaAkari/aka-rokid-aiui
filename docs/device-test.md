@@ -29,6 +29,11 @@ and honest-outcome rules.
 - Missing optional config (e.g. an unconfigured endpoint) yields **incomplete**,
   never a false success.
 - Prototypes must be explicitly marked "原型 / PROTOTYPE" in the UI and in docs.
+- Device capability `ok / unsupported / failed` may **only** be reported by
+  `system-diagnostics`. `combat-power-detector` and `hermes-agent` must not emit
+  such a verdict.
+- A not-yet-integrated agent (e.g. `hermes-agent`) must honestly state it is not
+  connected and must not claim real inference.
 
 ## Verification method checklist
 

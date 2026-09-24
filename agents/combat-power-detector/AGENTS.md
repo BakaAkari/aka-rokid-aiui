@@ -1,6 +1,6 @@
 # Agent: 战斗力检测器
 
-- **Version**: 0.1.0
+- **Version**: 0.1.1
 - **Description**: 名为"战斗力检测器"的 Rokid Glasses **原型**。语音唤起，唯一确认键触发**相机能力与视觉状态**检测。本应用为原型，只检测相机可用性与视觉状态，**不**作真实战斗/身份/健康判断。
 - **Author**: BakaAkari
 
@@ -35,6 +35,13 @@
 
 ## Versioning
 
-- 当前正式版本为 `0.1.0`（原型）。
+- 当前正式版本为 `0.1.1`（原型）。
 - 只有用户明确要求升级时才修改版本号。
 - `package.json` 与本文件的 `Version` 必须一致。
+
+## Boundary（与系统测试区分）
+
+- 本 Agent 是**战斗力检测器产品原型**：只检测**相机可用性与视觉状态**，为未来的视觉/姿态/游戏化体验打基础。
+- **完整设备能力测试系统**（运行时基础 API / 语音识别 zh-CN / 相机 / 扬声器·语音合成 / 公网 HTTPS 基线的 `ok/unsupported/failed` 报告）已迁出，归属独立 Agent **`agents/system-diagnostics`（系统测试，v0.2.0）**。
+- 本 Agent **不**承载、**不**引用 `system-diagnostics` 的能力诊断，也不跨 Agent import。
+- 设备能力 `ok / unsupported / failed` 的结论**只有** `system-diagnostics` 能报告；本 Agent 只报告相机视觉结果。

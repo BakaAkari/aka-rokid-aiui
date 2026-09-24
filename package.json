@@ -1,12 +1,12 @@
 {
   "name": "aka-rokid-aiui",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
-  "description": "Long-term Rokid AIUI agents monorepo: glasses diagnostics, camera experiments, and future Hermes integration.",
+  "description": "Long-term Rokid AIUI agents monorepo: connection diagnostics, full device system testing, camera/visual product prototype, and a Hermes client skeleton.",
   "type": "module",
   "scripts": {
     "test": "node --test",
-    "test:agents": "node --test agents/connection-diagnostics/test/ agents/combat-power-detector/test/",
+    "test:agents": "node --test agents/connection-diagnostics/test/ agents/system-diagnostics/test/ agents/combat-power-detector/test/ agents/hermes-agent/test/",
     "validate": "node scripts/validate.mjs",
     "check:secrets": "node scripts/check-secrets.mjs",
     "check:versions": "node scripts/check-versions.mjs"

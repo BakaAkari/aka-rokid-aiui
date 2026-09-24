@@ -1,0 +1,14 @@
+{
+  "name": "aiui-hermes-agent",
+  "version": "0.1.0",
+  "description": "Rokid Glasses Hermes 客户端（开发骨架）。Hermes 尚未接入，不连接任何端点、不调用模型、不伪造可用性，只如实显示接入状态。",
+  "main": "app.js",
+  "type": "module",
+  "scripts": {
+    "test": "node --test",
+    "validate": "node scripts/validate.mjs",
+    "package:zip": "node scripts/package-zip.mjs",
+    "package:aix": "node scripts/package-aix.mjs"
+  },
+  "dependencies": {}
+}

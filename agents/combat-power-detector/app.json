@@ -1,6 +1,6 @@
 {
   "name": "战斗力检测器",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Rokid Glasses 原型：语音唤起，唯一确认键触发相机能力与视觉状态检测。本应用为原型，只检测相机可用性与视觉状态，不作真实战斗/身份/健康判断。仅本机验证。",
   "pages": [
     "pages/index/index"

@@ -1,0 +1,15 @@
+{
+  "name": "Hermes 客户端",
+  "version": "0.1.0",
+  "description": "Rokid Glasses Hermes 客户端（开发骨架）。语音唤起，唯一确认键。Hermes 尚未接入：不连接任何端点、不调用模型、不伪造可用性，只如实显示接入状态。仅本机验证。",
+  "pages": [
+    "pages/index/index"
+  ],
+  "permissions": [],
+  "window": {
+    "navigationBarTitleText": "Hermes 客户端",
+    "viewport": {
+      "width": "device-width"
+    }
+  }
+}

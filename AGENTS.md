@@ -15,6 +15,27 @@ repo-root libs) — each agent must be importable standalone into AIUI Studio.
 - `docs/` — shared engineering + device-test docs.
 - `.github/workflows/` — CI, version discipline, and secrets scans.
 
+## Agent boundaries (do not blur)
+
+Each agent is an independent product/system boundary. Never fold one agent's
+responsibility into another:
+
+- `agents/connection-diagnostics/` — local HTTPS / runtime connectivity probe.
+- `agents/system-diagnostics/` — the **full device capability test system**
+  (runtime base APIs, SpeechRecognition zh-CN, camera, speaker/synthesis, public
+  HTTPS baseline). It reports `ok / unsupported / failed` per capability. Product
+  name "系统测试".
+- `agents/combat-power-detector/` — a **product prototype** of a camera/visual
+  experience. It does NOT carry the full system diagnostics and never claims a
+  real combat-power score. The only agent allowed to report device capability
+  `ok / unsupported / failed` is `system-diagnostics`.
+- `agents/hermes-agent/` — a **development skeleton** for the future Hermes
+  client. It is NOT yet connected to any Hermes endpoint and never claims real
+  inference. It does not import or reuse the system test.
+
+No agent imports another agent, and no agent reuses another agent's `lib/`.
+Each is importable standalone into AIUI Studio.
+
 ## Rules that always apply
 
 1. **No secrets.** No keys, tokens, passwords, or hardcoded private/tailnet IPs in

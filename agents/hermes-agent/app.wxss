@@ -1,0 +1,12 @@
+:root {
+  --color-background: #000000;
+  --color-ink: #40ff5e;
+  --color-ink-primary: rgba(64, 255, 94, 0.72);
+  --color-ink-secondary: rgba(64, 255, 94, 0.48);
+  --color-ink-disabled: rgba(64, 255, 94, 0.24);
+  --color-line-strong: rgba(64, 255, 94, 0.72);
+  --color-line-default: rgba(64, 255, 94, 0.48);
+  --color-line-muted: rgba(64, 255, 94, 0.24);
+  --color-surface-active: rgba(64, 255, 94, 0.12);
+  font-family: sans-serif;
+}

@@ -1,0 +1,11 @@
+node_modules/
+.cache/
+.DS_Store
+*.aix
+*.zip
+*.log
+test/
+scripts/
+docs/
+HANDOFF.md
+README.md

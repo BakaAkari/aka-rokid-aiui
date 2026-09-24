@@ -16,7 +16,9 @@ Currently it hosts glasses connection diagnostics, a camera-capability experimen
 .
 ├── agents/                          # self-contained, Studio-importable agents
 │   ├── connection-diagnostics/      # confirm-key HTTPS / runtime connectivity probe
-│   └── combat-power-detector/       # camera capability detector (PROTOTYPE)
+│   ├── system-diagnostics/          # FULL device capability test system (系统测试)
+│   ├── combat-power-detector/       # camera/visual product prototype (PROTOTYPE)
+│   └── hermes-agent/                # future Hermes client skeleton (未接入)
 ├── docs/                            # shared engineering + device-test docs
 ├── scripts/                         # root-level validate / secrets / version checks
 ├── test/                            # root-level shared (cross-agent) tests
@@ -28,7 +30,9 @@ Currently it hosts glasses connection diagnostics, a camera-capability experimen
 | Agent | Purpose | Status |
 | --- | --- | --- |
 | `connection-diagnostics` | Single confirm-key flow: runtime self-check → public HTTPS baseline → phone Tailscale MagicDNS. Honest verdict (never claims a link passed unless MagicDNS was configured and every core step returned 2xx). | Maintained |
-| `combat-power-detector` | Voice-wakeup app, single confirm key triggers **camera capability** detection + an honest placeholder. Named "战斗力检测器" but only reports camera availability / visual state — **no real human / identity / strength judgement**. | PROTOTYPE |
+| `system-diagnostics` | **Full device capability test system.** Single confirm-key flow reports `ok / unsupported / failed` for: runtime base APIs, SpeechRecognition zh-CN, camera (live video), speaker/speech synthesis, public HTTPS baseline. Product name "系统测试". It is the **only** agent allowed to report device capability `ok / unsupported / failed`. | Maintained |
+| `combat-power-detector` | **Product prototype** of a camera/visual experience. Named "战斗力检测器" but only proves camera availability / visual state — **no real human / identity / strength judgement** and **no** `ok/unsupported/failed` device-capability verdict (that belongs to `system-diagnostics`). | PROTOTYPE |
+| `hermes-agent` | **Development skeleton** for the future Hermes client. It is **not yet connected** to any Hermes endpoint and never claims real inference; it only shows an honest "Hermes 尚未接入" status. | SKELETON (未接入) |
 
 ## Importing an agent into AIUI Studio
 
@@ -37,8 +41,7 @@ agent:
 
 1. In AIUI Studio → create a project → **Import from Github**.
 2. Point the repository to `BakaAkari/aka-rokid-aiui`, branch `main`.
-3. Set the target directory to **`agents/connection-diagnostics`** (or
-   `agents/combat-power-detector`).
+3. Set the target directory to **`agents/connection-diagnostics`**, **`agents/system-diagnostics`**, **`agents/combat-power-detector`**, or **`agents/hermes-agent`**.
 4. Studio resolves the project from that subdirectory — the agent must not require
    any file outside it. Each agent ships its own `app.json`, `app.js`, `AGENTS.md`,
    `README.md`, and `pages/index/index.ink`.
@@ -80,12 +83,17 @@ rules.
 
 ## Roadmap
 
-- **Hermes client**: a future agent that integrates the Hermes protocol for
-  on-glasses agentic inference. Kept out of `connection-diagnostics` (which
-  explicitly does **not** integrate Hermes) and parked as a new `agents/` entry.
-- **combat-power-detector** is an explicit prototype that only proves camera
-  availability; real vision/judgement requires an offline or Hermes vision model
-  and is **out of scope** for the current prototype.
+- **Hermes client**: a future agent (`agents/hermes-agent`) that integrates the
+  Hermes protocol for on-glasses agentic inference. It is currently a **skeleton**
+  and explicitly **not connected**. Kept out of `connection-diagnostics` (which
+  does **not** integrate Hermes). It does not reuse the system test.
+- **system-diagnostics** is the **full device capability test system**; it
+  reports `ok / unsupported / failed` per capability. It is the only agent allowed
+  to emit such a verdict.
+- **combat-power-detector** is an explicit product prototype that only proves
+  camera availability / visual state; real vision/judgement requires an offline or
+  Hermes vision model and is **out of scope** for the prototype. Device-capability
+  verdicts live only in `system-diagnostics`.
 
 ## License
 

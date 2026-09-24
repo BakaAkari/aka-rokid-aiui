@@ -41,7 +41,7 @@ function emptyStep(status = DetectorState.IDLE) {
 
 export default {
   data: {
-    version: '0.1.0',
+    version: '0.1.1',
     clock: '--:--:--',
     phase: 'idle', // idle | running | done
     prototype: true,

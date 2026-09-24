@@ -12,6 +12,6 @@ export default {
     console.log('[战斗力检测] App Error:', error);
   },
   globalData: {
-    version: '0.1.0'
+    version: '0.1.1'
   }
 };

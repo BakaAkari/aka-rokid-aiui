@@ -62,3 +62,9 @@ npm run package:aix # 仅结构校验 + 本地源码 zip（非 Studio .aix 二�
 ```
 
 真机验证步骤见 `docs/DEVICE_TEST.md`。
+
+## 与系统测试的边界
+
+- 本 Agent 是**战斗力检测器产品原型**：只检测**相机可用性与视觉状态**，为未来的视觉/姿态/游戏化体验打基础。
+- **完整设备能力测试系统**（运行时基础 API / 语音识别 zh-CN / 相机 / 扬声器·语音合成 / 公网 HTTPS 基线的 `ok/unsupported/failed` 报告）已迁出，归属独立 Agent **`agents/system-diagnostics`（系统测试，v0.2.0）**。本 Agent 不跨目录 import、不引用该系统测试。
+- 设备能力 `ok / unsupported / failed` 的结论**只有** `system-diagnostics` 能报告；本 Agent 只报告相机视觉结果。
