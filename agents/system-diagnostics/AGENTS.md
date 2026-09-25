@@ -1,6 +1,6 @@
 # Agent: 应用测试（设备系统测试）
 
-- **Version**: 0.2.1
+- **Version**: 0.2.2
 - **Description**: Rokid Glasses **设备系统测试**。语音唤起，唯一确认键触发一次**设备能力诊断**：按顺序测试运行时/AIUI 基础 API、语音识别(zh-CN)、相机、扬声器/语音合成、公网 HTTPS 基线。本 Agent 只做设备能力诊断并如实报告 ok/unsupported/failed，**不**作真实战斗/身份/健康判断。
 - **Author**: BakaAkari
 
@@ -36,6 +36,6 @@
 
 ## Versioning
 
-- 当前正式版本为 `0.2.1`。
+- 当前正式版本为 `0.2.2`。
 - 只有用户明确要求升级时才修改版本号。
 - `package.json` 与本文件的 `Version` 必须一致。

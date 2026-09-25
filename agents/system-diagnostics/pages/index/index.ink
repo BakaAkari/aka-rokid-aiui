@@ -48,7 +48,7 @@ function emptyStep(status = CapabilityState.UNKNOWN) {
 
 export default {
   data: {
-    version: '0.2.1',
+    version: '0.2.2',
     clock: '--:--:--',
     phase: 'idle', // idle | running | done
     prototype: true,
@@ -191,7 +191,7 @@ export default {
       hasW3cCamera: !!(md && typeof md.getUserMedia === 'function'),
       hasImageCapture: typeof ImageCapture !== 'undefined',
       hasWxCamera: !!(typeof wx !== 'undefined' && wx.media && typeof wx.media.createCameraContext === 'function'),
-      hasSpeechRecognition: typeof SpeechRecognition !== 'undefined',
+      hasSpeechRecognition: typeof SpeechRecognition !== 'undefined' || typeof webkitSpeechRecognition !== 'undefined',
       hasSpeechSynthesis: typeof speechSynthesis !== 'undefined',
       hasSpeechSynthesisUtterance: typeof SpeechSynthesisUtterance !== 'undefined'
     };
@@ -235,13 +235,18 @@ export default {
   runSpeechRecognition() {
     return new Promise((resolve) => {
       const caps = this.collectCaps();
-      if (!speechApiPresent(caps)) {
+      const Recognition = typeof SpeechRecognition !== 'undefined'
+        ? SpeechRecognition
+        : typeof webkitSpeechRecognition !== 'undefined'
+          ? webkitSpeechRecognition
+          : null;
+      if (!speechApiPresent(caps) || !Recognition) {
         resolve({ status: CapabilityState.UNSUPPORTED, detail: '无语音识别API', metric: '' });
         return;
       }
       let recognition;
       try {
-        recognition = new SpeechRecognition();
+        recognition = new Recognition();
         recognition.lang = 'zh-CN';
         recognition.interimResults = true;
         recognition.continuous = false;
@@ -252,7 +257,6 @@ export default {
       this.recognition = recognition;
 
       let gotFinal = false;
-      let errorName = '';
       let settled = false;
       const finish = (status, detail) => {
         if (settled) return;
@@ -263,26 +267,20 @@ export default {
         resolve({ status, detail, metric });
       };
 
-      // Correct use of result.isFinal: we only treat a FINAL result as a
-      // successful recognition; provisional/interim segments never count as
-      // success and never get persisted or stacked on screen.
+      // Correct use of result.isFinal: interim results never count as success.
       recognition.onresult = (event) => {
         const { text, final } = extractSpeechResult(event);
         if (final && text) gotFinal = true;
-        // We deliberately do NOT retain/display the transcript text anywhere;
-        // on-screen output is a short status only.
       };
+      // Some embedded runtimes emit onerror without a subsequent onend.
+      // Finish here so a speech failure cannot block camera/network checks.
       recognition.onerror = (event) => {
-        errorName = (event && event.error) || '识别出错';
+        const errorName = (event && event.error) || '识别出错';
+        finish(CapabilityState.FAILED, describeSpeechStatus({ started: true, gotFinal, error: errorName }));
       };
       recognition.onend = () => {
-        if (gotFinal) {
-          finish(CapabilityState.OK, '语音识别闭环成功');
-        } else if (errorName) {
-          finish(CapabilityState.FAILED, describeSpeechStatus({ started: true, gotFinal: false, error: errorName }));
-        } else {
-          finish(CapabilityState.FAILED, '未取得最终语音结果');
-        }
+        if (gotFinal) finish(CapabilityState.OK, '语音识别闭环成功');
+        else finish(CapabilityState.FAILED, '未取得最终语音结果');
       };
 
       recognition.onstart = () => {
@@ -291,8 +289,7 @@ export default {
 
       try {
         recognition.start();
-        // Bound the whole recognition session; if it never ends we treat it as
-        // performed (started) without claiming a final result.
+        // Embedded runtimes may neither emit onerror nor onend.
         setTimeout(() => {
           if (!settled) {
             finish(
