@@ -1,6 +1,6 @@
 <script def>
 {
-  "navigationBarTitleText": "系统测试",
+  "navigationBarTitleText": "应用测试",
   "description": "Rokid Glasses 设备系统测试：语音唤起，唯一确认键按顺序检测运行时基础API、语音识别(zh-CN)、相机、扬声器/语音合成、公网HTTPS基线。本应用只做设备能力诊断，如实报告 ok/unsupported/failed，不作真实战斗/身份/健康判断。",
   "schema": {
     "data": {
@@ -48,7 +48,7 @@ function emptyStep(status = CapabilityState.UNKNOWN) {
 
 export default {
   data: {
-    version: '0.2.0',
+    version: '0.2.1',
     clock: '--:--:--',
     phase: 'idle', // idle | running | done
     prototype: true,
@@ -496,7 +496,7 @@ export default {
 <page>
   <view class="screen">
     <view class="header-row">
-      <text class="title">系统测试</text>
+      <text class="title">应用测试</text>
       <text class="header-meta">设备能力诊断 · v{{version}} · {{clock}}</text>
     </view>
 

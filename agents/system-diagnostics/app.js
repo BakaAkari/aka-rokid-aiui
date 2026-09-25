@@ -1,17 +1,17 @@
 export default {
   onLaunch() {
-    console.log('[系统测试] App Launch');
+    console.log('[应用测试] App Launch');
   },
   onShow() {
-    console.log('[系统测试] App Show');
+    console.log('[应用测试] App Show');
   },
   onHide() {
-    console.log('[系统测试] App Hide');
+    console.log('[应用测试] App Hide');
   },
   onError(error) {
-    console.log('[系统测试] App Error:', error);
+    console.log('[应用测试] App Error:', error);
   },
   globalData: {
-    version: '0.2.0'
+    version: '0.2.1'
   }
 };
