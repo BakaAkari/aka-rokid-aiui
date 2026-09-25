@@ -73,8 +73,8 @@ and honest-outcome rules.
 
 ## Complete capability baseline
 
-`agents/system-diagnostics` 0.3.0 is the repository's development foundation. It
-uses a fixed 33-item catalog across runtime, display/input, audio/AI, vision,
+`agents/system-diagnostics` 0.3.1 is the repository's development foundation. It
+uses a fixed 42-item catalog across runtime, display/input, audio/AI, vision,
 sensors, device information, connectivity, network, storage, and native-layer
 boundaries. A result is never generalized to “all device abilities passed”:
 

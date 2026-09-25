@@ -1,6 +1,6 @@
 # Agent: 应用测试（完整设备能力基线）
 
-- **Version**: 0.3.0
+- **Version**: 0.3.1
 - **Description**: 国内版 Rokid Glasses / YodaOS-Sprite 的 AIUI 应用层能力基线与回归套件。
 - **Author**: BakaAkari
 
@@ -15,7 +15,7 @@
 
 ## Coverage
 
-33 项 / 10 类：运行时、显示交互、音频 AI、视觉、传感器、设备信息、连接、网络、存储、原生层边界。官方 API 来源见 README。
+42 项 / 10 类：运行时、页面环境感知、显示交互、音频 AI、视觉、传感器、设备信息、连接、网络、存储、原生层边界。官方 API 来源见 README。
 
 ## Permissions
 
@@ -34,6 +34,6 @@
 
 ## Versioning
 
-- 当前正式版本为 `0.3.0`。
+- 当前正式版本为 `0.3.1`。
 - 架构级覆盖扩展使用 minor 版本。
 - `package.json`、`app.json`、`app.js`、页面和本文件版本必须同步。

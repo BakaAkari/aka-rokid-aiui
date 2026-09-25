@@ -1,7 +1,7 @@
 {
   "name": "应用测试",
-  "version": "0.3.0",
-  "description": "Rokid Glasses AIUI 应用层完整能力基线：运行时、显示交互、音频AI、视觉、传感器、设备信息、连接、网络、存储与原生层边界。",
+  "version": "0.3.1",
+  "description": "Rokid Glasses AIUI 应用层完整能力基线：42 项覆盖运行时、页面环境感知、显示交互、音频AI、视觉、传感器、设备信息、连接、网络、存储与原生层边界。",
   "pages": [
     "pages/index/index"
   ],

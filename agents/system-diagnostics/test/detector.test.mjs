@@ -5,7 +5,7 @@ import { EvidenceState, CapabilityCatalog, createResult, summarizeResults, summa
 import { withTimeout, extractSpeechResult } from '../lib/detector.js';
 
 test('catalog covers all foundation domains with stable unique ids', () => {
-  assert.ok(CapabilityCatalog.length >= 33);
+  assert.equal(CapabilityCatalog.length, 42);
   assert.equal(new Set(CapabilityCatalog.map((x) => x.id)).size, CapabilityCatalog.length);
   const groups = new Set(CapabilityCatalog.map((x) => x.group));
   for (const group of ['运行时','显示交互','音频AI','视觉','传感器','设备信息','连接','网络','存储','原生层']) assert.ok(groups.has(group));
@@ -13,7 +13,8 @@ test('catalog covers all foundation domains with stable unique ids', () => {
 
 test('catalog explicitly covers official AIUI APIs', () => {
   const ids = new Set(CapabilityCatalog.map((x) => x.id));
-  for (const id of ['sensor.accelerometer','sensor.gyroscope','sensor.orientation','device.battery','geo.position','bluetooth.availability','vision.barcode','speech.mic','speech.session','audio.synthesis','audio.webaudio','ai.language','camera.live','network.https','network.websocket','network.sse','storage.local','storage.indexeddb','storage.opfs']) assert.ok(ids.has(id), `missing ${id}`);
+  for (const id of ['runtime.url','page.world','page.headgesture','page.voicewakeup','sensor.accelerometer','sensor.gyroscope','sensor.orientation','sensor.magnetometer','device.battery','geo.position','bluetooth.availability','vision.barcode','speech.mic','speech.session','audio.synthesis','audio.webaudio','ai.language','camera.live','camera.devices','camera.recorder','network.https','network.wxhttps','network.websocket','network.sse','storage.local','storage.wx','storage.manager','storage.opfs']) assert.ok(ids.has(id), `missing ${id}`);
+  assert.ok(!ids.has('storage.indexeddb'), 'IndexedDB is not in the verified official storage contract');
 });
 
 test('evidence summary distinguishes proof levels and never claims all device abilities passed', () => {
@@ -56,6 +57,12 @@ test('async hardware probes are bounded', async () => {
   const source = await readFile(new URL('../pages/index/index.ink', import.meta.url), 'utf8');
   for (const timeout of ['16000','12000','5000','8000']) assert.ok(source.includes(timeout));
   assert.match(source, /onerror/); assert.match(source, /onend/);
+});
+
+test('canvas uses the documented Canvas API and not unsupported OffscreenCanvas', async () => {
+  const source = await readFile(new URL('../pages/index/index.ink', import.meta.url), 'utf8');
+  assert.match(source, /new Canvas\(2,2\)/);
+  assert.doesNotMatch(source, /OffscreenCanvas/);
 });
 
 test('privacy: page never renders transcript, coordinates, ids, barcode values or response bodies', async () => {
