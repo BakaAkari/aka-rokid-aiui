@@ -21,10 +21,9 @@ Each agent is an independent product/system boundary. Never fold one agent's
 responsibility into another:
 
 - `agents/connection-diagnostics/` — local HTTPS / runtime connectivity probe.
-- `agents/system-diagnostics/` — the **full device capability test system**
+- `agents/system-diagnostics/` — product name **应用测试**, the **full device capability test system**
   (runtime base APIs, SpeechRecognition zh-CN, camera, speaker/synthesis, public
-  HTTPS baseline). It reports `ok / unsupported / failed` per capability. Product
-  name "系统测试".
+  HTTPS baseline). It reports `ok / unsupported / failed` per capability.
 - `agents/combat-power-detector/` — a **product prototype** of a camera/visual
   experience. It does NOT carry the full system diagnostics and never claims a
   real combat-power score. The only agent allowed to report device capability

@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
 import {
   classifyCapability,
   CapabilityState,
@@ -30,6 +31,15 @@ import {
   evaluateDeviceRun,
   isComplete
 } from '../lib/detector.js';
+
+test('page lifecycle does not cancel a run on temporary onHide', async () => {
+  const source = await readFile(new URL('../pages/index/index.ink', import.meta.url), 'utf8');
+  const onHide = source.match(/onHide\(\)\s*\{([\s\S]*?)\n\s*\},/);
+  assert.ok(onHide, 'onHide handler must exist');
+  assert.ok(!onHide[1].includes('cancelRun'), 'temporary permission UI must not invalidate the run');
+  assert.match(source, /withTimeout\(this\.runSpeechRecognition\(\), 15000, 'speech'\)/);
+  assert.match(source, /withTimeout\([\s\S]*getUserMedia\(\{ video: true \}\)[\s\S]*12000,[\s\S]*'camera'/);
+});
 
 test('classifyCapability distinguishes unsupported, failed and ok', () => {
   assert.equal(classifyCapability(false, null), CapabilityState.UNSUPPORTED);

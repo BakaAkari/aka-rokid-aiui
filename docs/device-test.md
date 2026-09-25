@@ -42,8 +42,27 @@ and honest-outcome rules.
 2. After packaging, in the **Hi Rokid** app → *Settings → Developer → Update
    glasses resource package*, wait for "Agent resource package downloaded
    successfully".
-3. Invoke by semantic match, e.g. *"Hi Rokid, open <agent name>"*.
-4. Walk the agent-specific matrix in its `docs/DEVICE_TEST.md`.
+3. If the Studio project was deleted/recreated, or the phone reports that the
+   package could not be obtained, fully restart the Rokid AI app before retrying.
+   Real-device verification confirmed that the phone may retain the deleted
+   Agent ID/package URL until process restart. Do not diagnose this message as an
+   AIX code crash unless the package was actually installed and launched.
+4. Verify the version shown **on the glasses**, not only the Studio card or phone
+   list. A successful build/download does not prove that the target version is
+   active on-device.
+5. Invoke by semantic match, e.g. *"Hi Rokid, open <agent name>"*.
+6. Walk the agent-specific matrix in its `docs/DEVICE_TEST.md`; confirm every
+   asynchronous step advances or reaches its bounded timeout. Reaching the target
+   version alone is not a functional pass.
+
+## Embedded-runtime lifecycle rule
+
+- Permission and speech-recognition surfaces may temporarily trigger page
+  `onHide`. `onHide` must pause presentation-only work such as the clock, but must
+  not cancel or invalidate the active diagnostic run.
+- Cleanup belongs to explicit stop/back, `onUnload`, or a proven terminal event.
+- Speech, camera, and network calls require outer watchdogs so a vendor API that
+  emits no terminal callback cannot block all later checks.
 
 ## Privacy
 

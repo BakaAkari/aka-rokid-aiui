@@ -48,7 +48,7 @@ function emptyStep(status = CapabilityState.UNKNOWN) {
 
 export default {
   data: {
-    version: '0.2.2',
+    version: '0.2.3',
     clock: '--:--:--',
     phase: 'idle', // idle | running | done
     prototype: true,
@@ -84,7 +84,9 @@ export default {
 
   onHide() {
     this.stopClock();
-    this.cancelRun('page hidden');
+    // Permission / speech-recognition surfaces may temporarily hide the page.
+    // Do not invalidate the active run here: onHide is not proof that the user
+    // exited. Backspace/onUnload and the confirm-key stop path still clean up.
   },
 
   onUnload() {
@@ -314,7 +316,11 @@ export default {
     try {
       let stream = null;
       if (caps.hasW3cCamera) {
-        stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        stream = await withTimeout(
+          navigator.mediaDevices.getUserMedia({ video: true }),
+          12000,
+          'camera'
+        );
       } else if (caps.hasWxCamera) {
         // wx CameraContext has no live MediaStreamTrack; CANNOT prove live video.
         return { status: CapabilityState.FAILED, detail: '仅wx相机上下文，无法证明实时画面', metric: '' };
@@ -436,8 +442,16 @@ export default {
     });
     finalSteps.push({ id: StepId.RUNTIME, state: runtimeState });
 
-    // ② Speech recognition (zh-CN) — actually starts a session.
-    const speech = await this.runSpeechRecognition();
+    // ② Speech recognition (zh-CN) — actually starts a session. Keep an outer
+    // watchdog as well as the recognition callbacks so a vendor runtime cannot
+    // block the remaining checks forever.
+    let speech;
+    try {
+      speech = await withTimeout(this.runSpeechRecognition(), 15000, 'speech');
+    } catch (error) {
+      this.releaseRecognition('speech watchdog');
+      speech = { status: CapabilityState.FAILED, detail: '语音识别超时', metric: '' };
+    }
     if (!this.detectionStillValid(runId)) return;
     this.setData({ stepSpeech: speech });
     finalSteps.push({ id: StepId.SPEECH, state: speech.status });

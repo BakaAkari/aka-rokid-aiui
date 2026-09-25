@@ -16,7 +16,7 @@ Currently it hosts glasses connection diagnostics, a camera-capability experimen
 .
 ├── agents/                          # self-contained, Studio-importable agents
 │   ├── connection-diagnostics/      # confirm-key HTTPS / runtime connectivity probe
-│   ├── system-diagnostics/          # FULL device capability test system (系统测试)
+│   ├── system-diagnostics/          # FULL device capability test system (应用测试)
 │   ├── combat-power-detector/       # camera/visual product prototype (PROTOTYPE)
 │   └── hermes-agent/                # future Hermes client skeleton (未接入)
 ├── docs/                            # shared engineering + device-test docs
@@ -30,7 +30,7 @@ Currently it hosts glasses connection diagnostics, a camera-capability experimen
 | Agent | Purpose | Status |
 | --- | --- | --- |
 | `connection-diagnostics` | Single confirm-key flow: runtime self-check → public HTTPS baseline → phone Tailscale MagicDNS. Honest verdict (never claims a link passed unless MagicDNS was configured and every core step returned 2xx). | Maintained |
-| `system-diagnostics` | **Full device capability test system.** Single confirm-key flow reports `ok / unsupported / failed` for: runtime base APIs, SpeechRecognition zh-CN, camera (live video), speaker/speech synthesis, public HTTPS baseline. Product name "系统测试". It is the **only** agent allowed to report device capability `ok / unsupported / failed`. | Maintained |
+| `system-diagnostics` | **Full device capability test system.** Single confirm-key flow reports `ok / unsupported / failed` for: runtime base APIs, SpeechRecognition zh-CN, camera (live video), speaker/speech synthesis, public HTTPS baseline. Product name "应用测试". It is the **only** agent allowed to report device capability `ok / unsupported / failed`. | Maintained |
 | `combat-power-detector` | **Product prototype** of a camera/visual experience. Named "战斗力检测器" but only proves camera availability / visual state — **no real human / identity / strength judgement** and **no** `ok/unsupported/failed` device-capability verdict (that belongs to `system-diagnostics`). | PROTOTYPE |
 | `hermes-agent` | **Development skeleton** for the future Hermes client. It is **not yet connected** to any Hermes endpoint and never claims real inference; it only shows an honest "Hermes 尚未接入" status. | SKELETON (未接入) |
 
@@ -58,7 +58,10 @@ For the full workflow (Craft, preview, real-device) see the
 3. **Build & Review → Package AIX** to produce a binary and sync it to the cloud.
 4. In the **Hi Rokid** app → *Settings → Developer → Update glasses resource
    package*, wait for "Agent resource package downloaded successfully".
-5. Invoke via semantic matching, e.g. *"Hi Rokid, open <agent name>"*.
+5. If the Studio project was deleted/recreated or package acquisition fails,
+   fully restart the phone app to clear its cached Agent ID/package URL, then
+   retry and verify the version displayed on the glasses.
+6. Invoke via semantic matching, e.g. *"Hi Rokid, open <agent name>"*.
 
 See `docs/device-test.md` for the per-agent verification matrix and honest-outcome
 rules.
