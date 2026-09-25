@@ -24,13 +24,13 @@ if (!/fetch\(|baseline/i.test(ink)) throw new Error('INTERNET/probe usage not ev
 // --- Interaction contract: confirm-only, no selectable menu ----------------
 const directional = /Arrow(?:Up|Down)\b|moveSelection|selectChip|selectedIndex/;
 if (directional.test(ink)) throw new Error('directional-key selection forbidden (confirm-only UI)');
-if (/(?:chips?|tabs?|menu-row|bindtap="selectChip"|wx:for="\{\{features\}\}")/.test(ink)) {
+if (/(?:\bchips?\b|\btabs?\b|menu-row|bindtap="selectChip"|wx:for="\{\{features\}\}")/.test(ink)) {
   throw new Error('selectable tab/chip menu forbidden — must be a single confirm-driven flow');
 }
 if (/features\s*:/m.test(ink)) throw new Error('legacy features array still present');
 if (/selectedIndex\s*==/.test(ink)) throw new Error('legacy tab-switching render block found');
 if (!ink.includes('onConfirm')) throw new Error('confirm key handler not wired');
-if (!ink.includes("code === 'Enter'")) throw new Error('Enter/GlobalHook not treated as confirm');
+if (!/===\s*'Enter'/.test(ink) || !/===\s*'GlobalHook'/.test(ink)) throw new Error('Enter/GlobalHook not treated as confirm');
 
 // --- Speech: final results must use result.isFinal --------------------------
 const lib = await readFile(join(root, 'lib/detector.js'), 'utf8');
@@ -38,6 +38,10 @@ if (!lib.includes('result.isFinal') && !lib.includes('isFinal')) {
   throw new Error('speech final result must be gated on result.isFinal');
 }
 if (!ink.includes('extractSpeechResult')) throw new Error('speech result extraction not wired into the page');
+if (!ink.includes('CapabilityCatalog')) throw new Error('complete capability catalog not wired into the page');
+if (!ink.includes('Accelerometer') || !ink.includes('Gyroscope') || !ink.includes('AbsoluteOrientationSensor')) {
+  throw new Error('official IMU sensor probes missing');
+}
 
 // --- Honest system test: never claims real combat / identity / health ------
 // The app must ONLY report device-capability diagnostic outcomes and must
@@ -55,10 +59,8 @@ if (!lib.includes('liveVideo') || !lib.includes('apiPresent')) {
   throw new Error('camera availability must be gated on liveVideo + apiPresent');
 }
 // The overall verdict vocabulary must be present and honest.
-if (!lib.includes('evaluateDeviceRun')) throw new Error('honest device run verdict (evaluateDeviceRun) not present');
-if (!lib.includes('设备能力诊断完成') || !lib.includes('部分通过') || !lib.includes('诊断失败') || !lib.includes('诊断未完成')) {
-  throw new Error('honest overall verdict labels missing (完成/部分通过/失败/未完成)');
-}
+if (!ink.includes('summaryText') || !ink.includes('已执行')) throw new Error('evidence-level coverage summary missing');
+if (/全部核心能力已通过/.test(libAndInk)) throw new Error('misleading all-core-capabilities verdict found');
 // No real capability claims for combat power / judgement. The system test must
 // never claim to OUTPUT a combat-power verdict, score, or rating, never judge
 // identity / health / danger, and never reference a human body. Negative
@@ -77,9 +79,13 @@ const stripComments = (t) => t
   .trim();
 const codeNoComments = stripComments(`${lib}\n${ink}`);
 
-// Photo bytes / transcript must never be persisted or uploaded.
-if (/wx\.setStorage|storage\.set|navigator\.sendBeacon|fetch\([\s\S]*?\{[\s\S]*?body/i.test(codeNoComments)) {
-  throw new Error('photo/visual/transcript bytes must not be persisted or uploaded');
+// Photo bytes / transcript must never be uploaded. The capability baseline may
+// write only fixed, non-sensitive sentinel values to its own diagnostic keys.
+if (/navigator\.sendBeacon|fetch\([\s\S]*?\{[\s\S]*?body/i.test(codeNoComments)) {
+  throw new Error('photo/visual/transcript bytes must not be uploaded');
+}
+if (/localStorage\.setItem\((?!k,\s*'1')|\.write\((?!'ok')/.test(codeNoComments)) {
+  throw new Error('storage probe may write only fixed non-sensitive sentinels');
 }
 
 // --- Privacy & network-policy guards --------------------------------------

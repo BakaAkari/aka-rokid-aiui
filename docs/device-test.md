@@ -70,3 +70,17 @@ and honest-outcome rules.
   keys, or full transcripts in screenshots or logs.
 - Agent-specific tests requiring camera/audio must have a declared permission and
   an explicit, granted state.
+
+## Complete capability baseline
+
+`agents/system-diagnostics` 0.3.0 is the repository's development foundation. It
+uses a fixed 33-item catalog across runtime, display/input, audio/AI, vision,
+sensors, device information, connectivity, network, storage, and native-layer
+boundaries. A result is never generalized to “all device abilities passed”:
+
+- `verified`: real return, sample, or closed loop in this run;
+- `surface`: API exists but the external loop was not proven;
+- `unsupported`: runtime does not expose the documented API;
+- `unavailable`: capability belongs to another layer or has no public AIUI API;
+- `failed`: invocation, permission, sample, or timeout failed;
+- `not-run`: requires an external device, sample, service, or controlled A/B run.

@@ -30,7 +30,7 @@ Currently it hosts glasses connection diagnostics, a camera-capability experimen
 | Agent | Purpose | Status |
 | --- | --- | --- |
 | `connection-diagnostics` | Single confirm-key flow: runtime self-check → public HTTPS baseline → phone Tailscale MagicDNS. Honest verdict (never claims a link passed unless MagicDNS was configured and every core step returned 2xx). | Maintained |
-| `system-diagnostics` | **Full device capability test system.** Single confirm-key flow reports `ok / unsupported / failed` for: runtime base APIs, SpeechRecognition zh-CN, camera (live video), speaker/speech synthesis, public HTTPS baseline. Product name "应用测试". It is the **only** agent allowed to report device capability `ok / unsupported / failed`. | Maintained |
+| `system-diagnostics` | **完整能力基线。** 单确认键执行 33 项 / 10 类 AIUI 应用层能力；按 `verified / surface / unsupported / unavailable / failed / not-run` 报告证据等级，并明确 CXR-S/Native 层边界。产品名“应用测试”。 | Maintained |
 | `combat-power-detector` | **Product prototype** of a camera/visual experience. Named "战斗力检测器" but only proves camera availability / visual state — **no real human / identity / strength judgement** and **no** `ok/unsupported/failed` device-capability verdict (that belongs to `system-diagnostics`). | PROTOTYPE |
 | `hermes-agent` | **Development skeleton** for the future Hermes client. It is **not yet connected** to any Hermes endpoint and never claims real inference; it only shows an honest "Hermes 尚未接入" status. | SKELETON (未接入) |
 

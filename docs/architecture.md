@@ -19,10 +19,12 @@ Each agent is an independent product/system boundary. Do not fold one agent's
 responsibility into another:
 
 - `connection-diagnostics` — local HTTPS / runtime connectivity probe.
-- `system-diagnostics` — the **full device capability test system**: runtime base
-  APIs, SpeechRecognition zh-CN, camera, speaker/synthesis, public HTTPS baseline.
-  It is the **only** agent allowed to report device capability
-  `ok / unsupported / failed`. Product name "系统测试".
+- `system-diagnostics` — product name **应用测试**, the complete AIUI-layer
+  capability baseline: 33 catalogued items across runtime, display/input,
+  audio/AI, vision, sensors, device information, connectivity, network, storage,
+  and native-layer boundaries. It reports evidence levels (`verified / surface /
+  unsupported / unavailable / failed / not-run`) rather than claiming all device
+  hardware passed.
 - `combat-power-detector` — a **product prototype** of a camera/visual experience.
   It does **not** carry the full system diagnostics and never claims a real
   combat-power score.

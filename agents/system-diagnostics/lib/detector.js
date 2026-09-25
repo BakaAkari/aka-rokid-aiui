@@ -439,7 +439,7 @@ export const OverallVerdict = Object.freeze({
 export const VerdictLabels = Object.freeze({
   [OverallVerdict.NOT_STARTED]: '未开始',
   [OverallVerdict.RUNNING]: '诊断中…',
-  [OverallVerdict.COMPLETE]: '设备能力诊断完成',
+  [OverallVerdict.COMPLETE]: '既定诊断项执行完成',
   [OverallVerdict.PARTIAL]: '部分通过',
   [OverallVerdict.FAILED]: '诊断失败',
   [OverallVerdict.INCOMPLETE]: '诊断未完成'
@@ -479,7 +479,7 @@ export function evaluateDeviceRun(input) {
   }
   const okCount = steps.filter((s) => s && s.state === CapabilityState.OK).length;
   if (okCount === total) {
-    return { verdict: OverallVerdict.COMPLETE, passed: true, okCount, total, detail: '全部核心能力已通过' };
+    return { verdict: OverallVerdict.COMPLETE, passed: true, okCount, total, detail: `本轮既定诊断 ${okCount}/${total} 项通过` };
   }
   if (okCount > 0) {
     return { verdict: OverallVerdict.PARTIAL, passed: false, okCount, total, detail: `${okCount}/${total} 项通过，其余不支持或失败` };

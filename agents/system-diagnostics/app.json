@@ -1,14 +1,15 @@
 {
   "name": "应用测试",
-  "version": "0.2.4",
-  "description": "Rokid Glasses 设备系统测试：语音唤起，唯一确认键按顺序检测运行时基础API、语音识别(zh-CN)、相机、扬声器/语音合成、公网HTTPS基线。本应用只做设备能力诊断，如实报告 ok/unsupported/failed，不作真实战斗/身份/健康判断。仅本机验证。",
+  "version": "0.3.0",
+  "description": "Rokid Glasses AIUI 应用层完整能力基线：运行时、显示交互、音频AI、视觉、传感器、设备信息、连接、网络、存储与原生层边界。",
   "pages": [
     "pages/index/index"
   ],
   "permissions": [
     "RECORD_AUDIO",
     "CAMERA",
-    "INTERNET"
+    "INTERNET",
+    "GEOLOCATION"
   ],
   "window": {
     "navigationBarTitleText": "应用测试",
