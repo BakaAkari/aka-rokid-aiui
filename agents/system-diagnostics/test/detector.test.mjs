@@ -41,6 +41,13 @@ test('page lifecycle does not cancel a run on temporary onHide', async () => {
   assert.match(source, /withTimeout\([\s\S]*getUserMedia\(\{ video: true \}\)[\s\S]*12000,[\s\S]*'camera'/);
 });
 
+test('one physical confirm cannot start and immediately stop the run', async () => {
+  const source = await readFile(new URL('../pages/index/index.ink', import.meta.url), 'utf8');
+  assert.match(source, /lastConfirmAt/);
+  assert.match(source, /now - this\.lastConfirmAt < 1500/);
+  assert.match(source, /duplicate confirm ignored/);
+});
+
 test('classifyCapability distinguishes unsupported, failed and ok', () => {
   assert.equal(classifyCapability(false, null), CapabilityState.UNSUPPORTED);
   assert.equal(classifyCapability(true, new Error('denied')), CapabilityState.FAILED);

@@ -12,6 +12,6 @@ export default {
     console.log('[应用测试] App Error:', error);
   },
   globalData: {
-    version: '0.2.3'
+    version: '0.2.4'
   }
 };

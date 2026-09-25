@@ -1,6 +1,6 @@
 {
   "name": "aka-rokid-aiui",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "private": true,
   "description": "Long-term Rokid AIUI agents monorepo: connection diagnostics, full device system testing, camera/visual product prototype, and a Hermes client skeleton.",
   "type": "module",

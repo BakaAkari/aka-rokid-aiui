@@ -48,7 +48,7 @@ function emptyStep(status = CapabilityState.UNKNOWN) {
 
 export default {
   data: {
-    version: '0.2.3',
+    version: '0.2.4',
     clock: '--:--:--',
     phase: 'idle', // idle | running | done
     prototype: true,
@@ -73,6 +73,8 @@ export default {
     this.runId = 0;
     this.caps = null;
     this.networkAbortController = null;
+    this.lastConfirmAt = 0;
+    this.lastConfirmCode = '';
     this.BASELINE_URL = 'https://js.rokid.com/';
     this.PROBE_TIMEOUT_MS = 8000;
   },
@@ -115,6 +117,16 @@ export default {
     const code = event && event.code;
     if (code === 'Enter' || code === 'GlobalHook') {
       event.preventDefault();
+      const now = Date.now();
+      // One physical temple-key press can be reported twice by the host as an
+      // Enter + GlobalHook pair. Treat that pair as one confirmation; otherwise
+      // the first event starts the run and the second immediately stops it.
+      if (now - this.lastConfirmAt < 1500) {
+        console.log('[应用测试] duplicate confirm ignored:', this.lastConfirmCode, code);
+        return;
+      }
+      this.lastConfirmAt = now;
+      this.lastConfirmCode = code;
       this.onConfirm();
       return;
     }
